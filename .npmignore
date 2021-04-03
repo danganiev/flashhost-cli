@@ -1,0 +1,9 @@
+.DS_Store
+node_modules
+testgatsby
+testproject
+src
+notes.txt
+babel.config.json
+.eslintrc.json
+.prettierrc

@@ -1,0 +1,4 @@
+------------
+npm link to make cli globally awailable on development pc (npm run build before that)
+npm run build && node dist/index.js *commandname* to local test
+------------

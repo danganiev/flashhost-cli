@@ -1,0 +1,16 @@
+node_modules/
+.venv/
+**/dist
+**/pgdata
+.DS_Store
+pgadmin-data
+testgatsby
+testproject
+
+server/migrations/current_handmade.sql
+flashhost-cli/project.tar.gz
+server/.production.env
+flashhost-cli/testproject/*
+flashhost-cli/testgatsby/*
+server/provisioning/test.yml
+server/landing/flashhost/.cache/*

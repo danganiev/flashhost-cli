@@ -1,0 +1,30 @@
+{
+  "extends": ["airbnb", "plugin:prettier/recommended"],
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "jest": true,
+    "node": true
+  },
+  "rules": {
+    "jsx-a11y/href-no-hash": ["off"],
+    "import/prefer-default-export": "off",
+    "no-useless-escape": "off",
+    "no-console": "off",
+    "max-len": [
+      "warn",
+      {
+        "code": 120,
+        "tabWidth": 2,
+        // "comments": 80,
+        "ignoreComments": true,
+        "ignoreTrailingComments": true,
+        "ignoreUrls": true,
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreRegExpLiterals": true
+      }
+    ]
+  }
+}
