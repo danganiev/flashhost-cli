@@ -14,7 +14,7 @@ import authUtils from '../utils/auth';
 
 import { SERVER_URL } from '../constants';
 
-let createProjectOnServer = async (url) => {
+const createProjectOnServer = async (url) => {
   client
     .mutate({
       mutation: gql`
@@ -30,7 +30,10 @@ let createProjectOnServer = async (url) => {
       },
     })
     .then((result) => {
-      uploadProject(result.data.createProject.id, result.data.createProject.urlPrefix);
+      uploadProject(
+        result.data.createProject.id,
+        result.data.createProject.urlPrefix
+      );
     })
     .catch((e) => {
       if (e.graphQLErrors) {
@@ -42,6 +45,7 @@ let createProjectOnServer = async (url) => {
 };
 
 let uploadProject = async (projectId, urlPrefix) => {
+  console.log('Идет загрузка проекта на сервер...');
   const form = new FormData();
   form.append('file', fs.createReadStream('project.tar.gz'), {
     filename: 'project.tar.gz',
@@ -68,7 +72,9 @@ let uploadProject = async (projectId, urlPrefix) => {
 
   if (result.status === 200) {
     if (urlPrefix.includes('.')) {
-      console.log(`Проект успешно опубликован. Он доступен по адресу http://${urlPrefix}`);
+      console.log(
+        `Проект успешно опубликован. Он доступен по адресу http://${urlPrefix}`
+      );
     } else {
       console.log(
         `Проект успешно опубликован. Он доступен по адресу https://${urlPrefix}.flashhost.site`
@@ -77,11 +83,18 @@ let uploadProject = async (projectId, urlPrefix) => {
   }
 };
 
-let zipProject = (path, url) => {
-  var project2_ = fsReader({ path, ignoreFiles: ['.flashhostignore'] });
+const zipProject = (path, url) => {
+  console.log('Идет сжатие проекта...');
+  const project2_ = fsReader({ path, ignoreFiles: ['.flashhostignore'] });
 
   // we always ignore .git directory
-  project2_.addIgnoreRules(['.git', '.*', '*.*~', 'node_modules', 'bower_components']);
+  project2_.addIgnoreRules([
+    '.git',
+    '.*',
+    '*.*~',
+    'node_modules',
+    'bower_components',
+  ]);
 
   let projectSize = 0;
   project2_.on('child', function (c) {
@@ -95,9 +108,15 @@ let zipProject = (path, url) => {
     // console.log(projectSize);
 
     if (projectSize < 499000000) {
-      var project_ = fsReader({ path, ignoreFiles: ['.flashhostignore'] });
-      project_.addIgnoreRules(['.git', '.*', '*.*~', 'node_modules', 'bower_components']);
-      let stream = fs.createWriteStream('project.tar.gz');
+      const project_ = fsReader({ path, ignoreFiles: ['.flashhostignore'] });
+      project_.addIgnoreRules([
+        '.git',
+        '.*',
+        '*.*~',
+        'node_modules',
+        'bower_components',
+      ]);
+      const stream = fs.createWriteStream('project.tar.gz');
 
       stream.on('error', (err) => {
         console.log(err);
@@ -110,14 +129,14 @@ let zipProject = (path, url) => {
       project_.pipe(tarr.Pack()).pipe(zlib.Gzip()).pipe(stream);
     } else {
       console.log(
-        'К сожалению на данный момент нельзя публиковать проекты размером более 500 мегабайт'.red
+        'К сожалению на данный момент нельзя публиковать проекты размером более 500 мегабайт'
+          .red
       );
-      return;
     }
   });
 };
 
-let project = (argPath) => {
+const project = (argPath) => {
   return new Promise((resolve, reject) => {
     var ask = function (defaultPath) {
       read(
@@ -136,12 +155,14 @@ let project = (argPath) => {
           }
 
           if (!fs.existsSync(path.resolve(projectPath))) {
-            console.log('   ', 'Пожалуйста введите правильный путь до проекта...'.red);
-            //TODO: how the fuck will this even work with promises
+            console.log(
+              '   ',
+              'Пожалуйста введите правильный путь до проекта...'.red
+            );
+            // TODO: how the fuck will this even work with promises
             return ask(projectPath);
-          } else {
-            resolve(path.resolve(projectPath));
           }
+          resolve(path.resolve(projectPath));
         }
       );
     };
@@ -156,8 +177,8 @@ let project = (argPath) => {
       return resolve(path.resolve(argPath));
     }
 
-    var currentPath = path.resolve('./');
-    let askResult = ask(path.join(currentPath, path.sep));
+    const currentPath = path.resolve('./');
+    const askResult = ask(path.join(currentPath, path.sep));
     return askResult;
   });
 };
@@ -182,7 +203,7 @@ const prefixGenerator = () => {
   return prefix;
 };
 
-let getUrl = (argUrl) => {
+const getUrl = (argUrl) => {
   return new Promise((resolve, reject) => {
     var ask = function (defaultUrl) {
       read(
@@ -203,19 +224,18 @@ let getUrl = (argUrl) => {
           if (url === '') {
             console.log('   ', 'Пожалуйста введите URL'.red);
             return ask(url);
-          } else {
-            let hasWrongSymbols = false;
-            ['/', '+'].forEach((val) => {
-              hasWrongSymbols = url.includes(val) || hasWrongSymbols;
-            });
-
-            if (hasWrongSymbols) {
-              console.log('    URL содержит недопустимые символы (/, +)'.red);
-              return ask(url);
-            }
-
-            resolve(url);
           }
+          let hasWrongSymbols = false;
+          ['/', '+'].forEach((val) => {
+            hasWrongSymbols = url.includes(val) || hasWrongSymbols;
+          });
+
+          if (hasWrongSymbols) {
+            console.log('    URL содержит недопустимые символы (/, +)'.red);
+            return ask(url);
+          }
+
+          resolve(url);
         }
       );
     };
@@ -233,14 +253,14 @@ let getUrl = (argUrl) => {
       return resolve(argUrl);
     }
 
-    let askResult = ask(`${prefixGenerator()}.flashhost.site`);
+    const askResult = ask(`${prefixGenerator()}.flashhost.site`);
     return askResult;
   });
 };
 
 const main = async (localCreds, args) => {
-  let project_,
-    url = null;
+  let project_;
+  let url = null;
   try {
     project_ = await project(args._[0]);
     url = await getUrl(args._[1]);
@@ -249,7 +269,6 @@ const main = async (localCreds, args) => {
     return;
   }
   if (project_ && url) {
-    console.log('Идет сжатие и загрузка проекта на сервер...');
     try {
       project_ = zipProject(project_, url);
     } catch (e) {

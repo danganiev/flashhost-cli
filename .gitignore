@@ -14,3 +14,5 @@ flashhost-cli/testproject/*
 flashhost-cli/testgatsby/*
 server/provisioning/test.yml
 server/landing/flashhost/.cache/*
+.env
+src/constants_dev.js
