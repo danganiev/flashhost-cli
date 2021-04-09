@@ -8,11 +8,11 @@ import { each } from 'lodash';
 
 import authUtils from './utils/auth';
 import { onCatch } from './utils/CatchLink';
+
 import { SERVER_URL } from './constants';
 
 const httpLink = createHttpLink({
   uri: `${SERVER_URL}/graphql`,
-  // uri: `https://server.flashhost.site/graphql`,
   fetch: fetch,
 });
 

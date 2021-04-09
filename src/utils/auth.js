@@ -3,12 +3,11 @@ import fs from 'fs';
 import netrc from 'netrc';
 import os from 'os';
 
-// let authUtils = (endpoint) => {
-//   var host = endpoint.host;
 var host = 'flashhost';
 
 var getFile = () => {
-  var home = process.env[/^win/.test(process.platform) ? 'USERPROFILE' : 'HOME'];
+  var home =
+    process.env[/^win/.test(process.platform) ? 'USERPROFILE' : 'HOME'];
   return path.join(home, '.netrc');
 };
 
@@ -56,6 +55,5 @@ let authUtils = {
   set: set,
   get: get,
 };
-// };
 
 export default authUtils;
