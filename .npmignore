@@ -8,3 +8,4 @@ babel.config.json
 .eslintrc.json
 .prettierrc
 .gitignore
+.npmignore

@@ -14,6 +14,15 @@ import authUtils from '../utils/auth';
 
 import { SERVER_URL } from '../constants';
 
+const ignoreRules = [
+  '.git',
+  '.*',
+  '*.*~',
+  '!.well-known',
+  'node_modules',
+  'bower_components',
+];
+
 const createProjectOnServer = async (url) => {
   client
     .mutate({
@@ -88,13 +97,7 @@ const zipProject = (path, url) => {
   const project2_ = fsReader({ path, ignoreFiles: ['.flashhostignore'] });
 
   // we always ignore .git directory
-  project2_.addIgnoreRules([
-    '.git',
-    '.*',
-    '*.*~',
-    'node_modules',
-    'bower_components',
-  ]);
+  project2_.addIgnoreRules(ignoreRules);
 
   let projectSize = 0;
   project2_.on('child', function (c) {
@@ -109,13 +112,7 @@ const zipProject = (path, url) => {
 
     if (projectSize < 499000000) {
       const project_ = fsReader({ path, ignoreFiles: ['.flashhostignore'] });
-      project_.addIgnoreRules([
-        '.git',
-        '.*',
-        '*.*~',
-        'node_modules',
-        'bower_components',
-      ]);
+      project_.addIgnoreRules(ignoreRules);
       const stream = fs.createWriteStream('project.tar.gz');
 
       stream.on('error', (err) => {

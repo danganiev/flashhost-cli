@@ -5,6 +5,8 @@ const SERVER_URL =
     ? 'http://server.flashhost2.site'
     : 'https://server.flashhost.site';
 
-console.log(SERVER_URL);
+if (process.env.IS_DEV) {
+  console.log('Dev mode on');
+}
 
 export { SERVER_URL };

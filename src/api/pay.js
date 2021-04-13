@@ -14,7 +14,7 @@ const pay = (localCreds) => {
     })
     .then((result) => {
       console.log(
-        `Ссылка на страницу оплаты: http://flashhost.site/payment?order=${result.data.createOrder}&email=${localCreds.email}`
+        `Ссылка на страницу оплаты: https://flashhost.site/payment?order=${result.data.createOrder}&email=${localCreds.email}`
       );
     })
     .catch((e) => {

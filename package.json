@@ -1,6 +1,6 @@
 {
   "name": "flashhost",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A CLI tool for simple static website uploading and hosting",
   "main": "index.js",
   "bin": {

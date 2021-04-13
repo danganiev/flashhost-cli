@@ -1,7 +1,7 @@
 import prompt from 'prompt';
 import gql from 'graphql-tag';
 import { each } from 'lodash';
-import { format, parse } from 'date-fns';
+import { format, parse, addDays } from 'date-fns';
 
 import client, { noErrorHandlingClient } from '../apolloClient';
 import { processGraphQLError } from '../utils/errors';
@@ -131,6 +131,13 @@ const billingInfo = async (localCreds) => {
           console.log(
             `Ваш пробный период истекает ${format(subUntil, 'dd/MM/yyyy')}`
           );
+          console.log(
+            `Если вы не перейдете на платный тариф, то все ваши сайты будут удалены ${format(
+              addDays(subUntil, 14),
+              'dd/MM/yyyy'
+            )}`
+          );
+          console.log('Для оплаты сервиса используйте команду flashhost pay');
         } else if (response.data.billingInfo.tariffId === 3) {
           console.log('Вы находитесь на платном тарифе');
           const subUntil = parse(
@@ -167,7 +174,7 @@ const auth = async (cb, args) => {
 
   if (localCreds === null) {
     console.log(
-      'Создавая аккаунт flashhost, вы соглашаетесь с условиями использования, расположенными по адресу http://flashhost.site/terms'
+      'Создавая аккаунт flashhost, вы соглашаетесь с условиями использования, расположенными по адресу https://flashhost.site/terms'
     );
     console.log('Авторизируйтесь (или создайте аккаунт) введя логин и пароль:');
     prompt.start();
